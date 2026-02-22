@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Churn Prediction Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(145deg, rgba(30, 30, 46, 0.9), rgba(20, 20, 35, 0.9));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #2e2e4a;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #2e69ff;
+            box-shadow: 0 15px 30px rgba(46, 105, 255, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2e69ff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .feature-card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        
+        .upload-container {
+            background: linear-gradient(135deg, rgba(30, 30, 46, 0.9), rgba(20, 20, 35, 0.9));
+            border-radius: 15px;
+            padding: 40px;
+            border: 2px dashed #2e69ff;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .upload-container h2 {
+            color: #2e69ff;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .file-input {
+            display: block;
+            margin: 20px auto;
+            padding: 15px;
+            width: 80%;
+            max-width: 500px;
+            background: rgba(20, 20, 35, 0.8);
+            border: 1px solid #2e2e4a;
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .file-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #2e69ff, #00d4ff);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(46, 105, 255, 0.4);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(46, 105, 255, 0.6);
+            background: linear-gradient(135deg, #00d4ff, #2e69ff);
+        }
+        
+        .file-info {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .tech-item {
+            background: rgba(46, 105, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #00d4ff;
+            font-size: 0.9rem;
+            border: 1px solid rgba(46, 105, 255, 0.3);
+        }
+        
+        .welcome-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(30, 30, 46, 0.8), rgba(20, 20, 35, 0.8));
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid #2e2e4a;
+        }
+        
+        .welcome-text {
+            max-width: 800px;
+            margin: 20px auto;
+            color: #b0b0b0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .instructions {
+            background: rgba(20, 20, 35, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid #2e69ff;
+        }
+        
+        .instructions h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            color: #b0b0b0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 20, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .spinner {
+            border: 5px solid rgba(46, 105, 255, 0.3);
+            border-top: 5px solid #2e69ff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #00d4ff;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing your data...</div>
+        <p style="color: #888; margin-top: 20px; max-width: 500px; text-align: center;">
+            Analyzing dataset, training models, and generating visualizations. This may take a moment.
+        </p>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1><i class="fas fa-brain"></i> Customer Churn Prediction Dashboard</h1>
+            <p class="subtitle">Enterprise-grade AI/ML platform for predicting customer churn with automated analysis and visualizations</p>
+            
+            <!-- Tech Stack -->
+            <div class="tech-stack">
+                <span class="tech-item"><i class="fab fa-python"></i> Python</span>
+                <span class="tech-item"><i class="fas fa-robot"></i> Scikit-Learn</span>
+                <span class="tech-item"><i class="fas fa-chart-bar"></i> Plotly</span>
+                <span class="tech-item"><i class="fab fa-html5"></i> Flask</span>
+                <span class="tech-item"><i class="fas fa-database"></i> Pandas</span>
+                <span class="tech-item"><i class="fas fa-network-wired"></i> ML Models</span>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="welcome-section fade-in">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Welcome to the AI-Powered Churn Analysis Platform</h2>
+            <p class="welcome-text">
+                This enterprise dashboard enables comprehensive customer churn analysis using advanced machine learning algorithms. 
+                Upload your customer dataset to receive automated insights, predictive models, and interactive visualizations 
+                suitable for business intelligence and strategic decision-making.
+            </p>
+        </div>
+
+        <!-- Features -->
+        <div class="feature-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-broom"></i>
+                </div>
+                <h3>Automated Data Cleaning</h3>
+                <p>Intelligent handling of missing values, data type conversions, and feature engineering. Includes outlier detection and data normalization for optimal model performance.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Advanced Visualizations</h3>
+                <p>Interactive charts, correlation heatmaps, distribution analysis, and real-time dashboards. Export-ready graphics for presentations and reports.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>ML Model Training</h3>
+                <p>Multiple algorithms (Logistic Regression, Decision Trees, Random Forest) with hyperparameter tuning and cross-validation for optimal predictions.</p>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions fade-in">
+            <h3><i class="fas fa-info-circle"></i> How to Use:</h3>
+            <ul>
+                <li>Prepare an Excel file with customer data (required columns: CustomerID, Churn Label, Contract, etc.)</li>
+                <li>Upload the file using the form below</li>
+                <li>The system will automatically analyze data, train models, and generate insights</li>
+                <li>Download the cleaned dataset and view model performance metrics</li>
+                <li>Use insights for customer retention strategies and business decisions</li>
+            </ul>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-container fade-in">
+            <h2><i class="fas fa-cloud-upload-alt"></i> Upload Customer Dataset</h2>
+            <p style="color: #b0b0b0; margin-bottom: 25px; max-width: 600px; margin: 0 auto 25px;">
+                Upload your Excel file (.xlsx or .xls) containing customer data for churn analysis
+            </p>
+            
+            <form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
+                <input type="file" name="file" accept=".xlsx,.xls" class="file-input" required>
+                <p class="file-info">Supported formats: .xlsx, .xls | Maximum file size: 50MB</p>
+                
+                <button type="submit" class="upload-btn" id="submitBtn">
+                    <i class="fas fa-rocket"></i> Run Complete Analysis
+                </button>
+            </form>
+            
+            <div style="margin-top: 30px; padding: 20px; background: rgba(20, 20, 35, 0.5); border-radius: 10px;">
+                <h4 style="color: #00d4ff; margin-bottom: 10px;"><i class="fas fa-shield-alt"></i> Data Security</h4>
+                <p style="color: #888; font-size: 0.9rem;">
+                    <i class="fas fa-lock"></i> Your data is processed locally and not stored on any server. 
+                    All analysis happens in your browser environment.
+                </p>
+            </div>
+        </div>
+
+        <!-- Expected Output -->
+        <div class="instructions fade-in">
+            <h3><i class="fas fa-chart-line"></i> What You'll Get:</h3>
+            <ul>
+                <li><strong>Model Performance Report:</strong> Accuracy, Precision, Recall, F1-Score for multiple ML models</li>
+                <li><strong>Visual Analytics:</strong> Churn distribution, contract analysis, correlation heatmaps</li>
+                <li><strong>Interactive Dashboard:</strong> Real-time exploration of churn patterns</li>
+                <li><strong>Cleaned Dataset:</strong> Downloadable Excel file with processed data</li>
+                <li><strong>AI Insights:</strong> Automated recommendations for customer retention</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <i class="fas fa-graduation-cap"></i> AI Engineer Portfolio Project | 
+                <i class="fas fa-briefcase"></i> Enterprise Ready | 
+                <i class="fas fa-code-branch"></i> Full Stack ML Implementation
+            </p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #666;">
+                Designed for MNC hiring evaluations - Demonstrates end-to-end machine learning pipeline implementation
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Form submission with loading animation
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Show loading animation
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+            loadingOverlay.style.display = 'flex';
+            
+            // Add dots animation
+            let dots = 0;
+            const dotInterval = setInterval(() => {
+                dots = (dots + 1) % 4;
+                document.querySelector('.loading-text').textContent = 
+                    'Processing your data' + '.'.repeat(dots);
+            }, 500);
+            
+            // Store interval for cleanup
+            this.dataset.dotInterval = dotInterval;
+        });
+        
+        // Add animations on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Churn Prediction Dashboard Initialized');
+            
+            // Fade-in animation for elements
+            const observerOptions = {
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+            
+            // File input styling
+            const fileInput = document.querySelector('.file-input');
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    this.style.borderColor = '#00ff9d';
+                    this.style.boxShadow = '0 0 10px rgba(0, 255, 157, 0.3)';
+                }
+            });
+            
+            // Feature cards hover effect
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.querySelector('.feature-icon').style.transform = 'scale(1.1)';
+                    this.querySelector('.feature-icon').style.transition = 'transform 0.3s';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.querySelector('.feature-icon').style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
