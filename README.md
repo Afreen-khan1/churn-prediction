@@ -34,7 +34,7 @@ Built to demonstrate enterprise-grade AI/ML engineering and full-stack deploymen
 | **Machine Learning** | scikit-learn, pandas, numpy, joblib |
 | **Visualization** | matplotlib, seaborn, plotly |
 | **Frontend** | HTML5, CSS3 (dark theme), Jinja2 templates |
-| **Deployment** | Render (planned) or any Python-enabled cloud |
+| **Deployment** | Hugging face space 
 
 ---
 
@@ -47,7 +47,7 @@ customer-churn-project/
 ├── churn_analysis.py          # Core ML pipeline (cleaning, training, graphing)
 ├── churn_model.pkl            # Saved best model (created after first training)
 ├── requirements.txt           # Python dependencies
-├── Procfile                   # For Render deployment
+├── Dockerfile                   # For Hugging face space deployment
 ├── runtime.txt                # Python version (3.12.10)
 │
 ├── templates/                 # HTML templates
