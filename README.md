@@ -3,9 +3,12 @@
 A production-ready, end-to-end machine learning web application that predicts customer churn from uploaded Excel files. It automatically cleans data, trains multiple models, and visualizes results through a professional dark-theme dashboard.  
 Built to demonstrate enterprise-grade AI/ML engineering and full-stack deployment skills.
 
-> **Note:** Deployment is in progress. A live demo link will be added here soon.
-
----
+> **Live Demo:**  
+> Try the deployed application here:  
+> https://afreenahamed-cudtomer-churn-prediction1.hf.space/
+>
+>A sample dataset **Telco_customer_churn.xlsx** is already included in this repository for testing the application.  
+Download it and upload it in the deployed app to see the churn prediction analysis.
 
 ## 📌 Features
 
